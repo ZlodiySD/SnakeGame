@@ -66,15 +66,19 @@ public class GameConroller : MonoBehaviour
 
     public void CheckSnakePosition()
     {
-        //GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
+        GameObject snake = GameObject.FindGameObjectWithTag("Snake");
 
-        for (int i = 0; i< cordMap.Length; i++)
+        int xSnakePos = (int)snake.transform.position.x;
+
+        int ySnakePos = (int)snake.transform.position.y;
+
+        if (snake.transform.position == cordMap[xSnakePos, ySnakePos].transform.position)
         {
-            if (cordMap[(int)obj[3].transform.position.x, (int)obj[3].transform.position.y].CompareTag("Wall"))
-            {
-                //GameOver();
-            }
+            if (cordMap[xSnakePos, ySnakePos].CompareTag("Wall"))
+                GameOver();
         }
+
+
     }
 
     public void GameOver()
