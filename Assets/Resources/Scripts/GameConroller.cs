@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class GameConroller : MonoBehaviour
 {
-    [SerializeField] private GameObject[] obj;
+    [SerializeField] public GameObject[] obj;
 
     [SerializeField] private int mapSize;
 
     private GameObject[,] cordMap;
+
+    private static GameConroller insnatce;
+
+    public static GameConroller Insnatce { get => insnatce; set => insnatce = value; }
+
+    private void Awake()
+    {
+        insnatce = this;
+    }
 
     private void MapGeterator()
     {
@@ -31,6 +40,7 @@ public class GameConroller : MonoBehaviour
         for(int i = 0; i<=wallCount; i++)
         {
             int xRbdCord = Random.Range(0, mapSize);
+
             int yRbdCord = Random.Range(0, mapSize);
 
             if(cordMap[xRbdCord, yRbdCord] == obj[1])
@@ -50,5 +60,25 @@ public class GameConroller : MonoBehaviour
         cordMap = new GameObject[mapSize+1, mapSize+1];
 
         MapGeterator();
+
+        Instantiate(obj[3], new Vector3(mapSize/2, mapSize/2, 0), Quaternion.identity);
+    }
+
+    public void CheckSnakePosition()
+    {
+        //GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
+
+        for (int i = 0; i< cordMap.Length; i++)
+        {
+            if (cordMap[(int)obj[3].transform.position.x, (int)obj[3].transform.position.y].CompareTag("Wall"))
+            {
+                //GameOver();
+            }
+        }
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
     }
 }
