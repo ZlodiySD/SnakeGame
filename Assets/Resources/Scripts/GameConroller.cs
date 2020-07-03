@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameConroller : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField] public GameObject[] obj;
 
     [SerializeField] private int mapSize;
@@ -13,6 +15,10 @@ public class GameConroller : MonoBehaviour
     private static GameConroller insnatce;
 
     public static GameConroller Insnatce { get => insnatce; set => insnatce = value; }
+
+    public bool appleBonus;
+
+    #endregion 
 
     private void Awake()
     {
@@ -62,23 +68,58 @@ public class GameConroller : MonoBehaviour
         MapGeterator();
 
         Instantiate(obj[3], new Vector3(mapSize/2, mapSize/2, 0), Quaternion.identity);
+
+        AppleSpawn();
+    }
+
+    public void AppleSpawn()
+    {
+        int h = 0;
+
+        while(h == 0)
+        {
+            int xRbdCord = Random.Range(0, mapSize);
+
+            int yRbdCord = Random.Range(0, mapSize);
+
+            if (cordMap[xRbdCord, yRbdCord].CompareTag("Ground"))
+            {
+                Destroy(cordMap[xRbdCord, yRbdCord]);
+
+                cordMap[xRbdCord, yRbdCord] = (GameObject)Instantiate(obj[2], new Vector3(xRbdCord, yRbdCord), Quaternion.identity);
+
+                h++;
+            }
+        }
     }
 
     public void CheckSnakePosition()
     {
         GameObject snake = GameObject.FindGameObjectWithTag("Snake");
 
-        int xSnakePos = (int)snake.transform.position.x;
+        int xSnakePos = (int)Mathf.Round(snake.transform.position.x/1);
 
-        int ySnakePos = (int)snake.transform.position.y;
+        int ySnakePos = (int)Mathf.Round(snake.transform.position.y / 1);
 
-        if (snake.transform.position == cordMap[xSnakePos, ySnakePos].transform.position)
+        Vector3 snakePosV3 = new Vector3(xSnakePos, ySnakePos, 0);
+
+        if (snakePosV3 == cordMap[xSnakePos, ySnakePos].transform.position)
         {
             if (cordMap[xSnakePos, ySnakePos].CompareTag("Wall"))
                 GameOver();
+
+            if (cordMap[xSnakePos, ySnakePos].CompareTag("Apple"))
+            {
+                AppleSpawn();
+
+                Destroy(cordMap[xSnakePos, ySnakePos]);
+
+                cordMap[xSnakePos, ySnakePos] = (GameObject)Instantiate(obj[0], new Vector3(xSnakePos, ySnakePos, 0), Quaternion.identity);
+
+                appleBonus = true;
+            }
+
         }
-
-
     }
 
     public void GameOver()
