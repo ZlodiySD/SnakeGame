@@ -8,6 +8,7 @@ TagManager:
   - Snake
   - Apple
   - Ground
+  - Tail
   layers:
   - Default
   - TransparentFX
