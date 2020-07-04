@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameConroller : MonoBehaviour
 {
@@ -118,12 +119,16 @@ public class GameConroller : MonoBehaviour
 
                 appleBonus = true;
             }
-
         }
     }
 
     public void GameOver()
     {
-        Debug.Log("GameOver");
+        RestartLevel();
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
